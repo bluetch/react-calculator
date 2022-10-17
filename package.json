@@ -1,6 +1,6 @@
 {
-  "homepage": "https://calculator-madza.netlify.app",
-  "name": "calculator",
+  "homepage": "https://github.com/bluetch/react-calculator",
+  "name": "react-calculator",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
