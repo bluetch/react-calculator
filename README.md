@@ -4,6 +4,12 @@ A calculator project built with React.
 
 ![Calculator Screenshot](https://i.imgur.com/rHHdqke.png)
 
+## Todo
+1. style components
+2. Features implementation
+3. Documentation
+4. Upload to GitHub
+
 ## Features
 
 1. Add, subtract, multiply, divide
@@ -16,13 +22,9 @@ A calculator project built with React.
 
 ## Installation
 
-1. `https://github.com/bluetch/react-calculator`
-
-2. `cd react-calculator`
-
-3. `npm install`
-
-4. `npm start`
+1. `cd react-calculator`
+2. `npm install`
+3. `npm start`
 
 ## Contributions
 
