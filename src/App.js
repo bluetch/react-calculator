@@ -19,23 +19,24 @@ const toLocaleString = (num) => {
 }
   
 
-//
+// clean space
 const removeSpaces = (num) => {
+  // \s => match a space, (ex: space, tab, newline, ...)
   return num.toString().replace(/\s/g, "");
 }
 
-// 加減乘除
+// operator
 const math = (a, b, sign) =>
   sign === "+" ? a + b : sign === "-" ? a - b : sign === "X" ? a * b : a / b;
 
 const App = () => {
   let [calc, setCalc] = useState({
-    sign: "",
-    num: 0,
-    res: 0,
+    sign: "", // operator
+    num: 0, // current number
+    res: 0, // result number
   });
 
-  // 數字鍵行為
+  // number button
   const numClickHandler = (e) => {
     e.preventDefault();
     const value = e.target.innerHTML;
@@ -51,7 +52,7 @@ const App = () => {
     }
   };
 
-  // 小數點行為
+  // coma button
   const comaClickHandler = (e) => {
     e.preventDefault();
     const value = e.target.innerHTML;
@@ -62,7 +63,7 @@ const App = () => {
     });
   };
 
-  // 運算符行為
+  // operator button
   const signClickHandler = (e) => {
     setCalc({
       ...calc,
@@ -82,7 +83,7 @@ const App = () => {
     });
   };
 
-  // 等於鍵行為
+  // equal button
   const equalsClickHandler = () => {
     if (calc.sign && calc.num) {
       setCalc({
@@ -103,7 +104,7 @@ const App = () => {
     }
   };
 
-  // 正負數反轉行為
+  // invert button
   const invertClickHandler = () => {
     setCalc({
       ...calc,
@@ -113,7 +114,7 @@ const App = () => {
     });
   };
 
-  // 餘數行為
+  // percent button
   const percentClickHandler = () => {
     let num = calc.num ? parseFloat(removeSpaces(calc.num)) : 0;
     let res = calc.res ? parseFloat(removeSpaces(calc.res)) : 0;
@@ -125,14 +126,14 @@ const App = () => {
     });
   };
 
-  // 重設行為
+  // reset button
   const resetClickHandler = () => {
     console.log(calc);
     setCalc({
       ...calc,
-      sign: "", // 運算符
-      num: 0, // 現在數字
-      res: 0, // 運算結果
+      sign: "",
+      num: 0,
+      res: 0,
     });
   };
 
