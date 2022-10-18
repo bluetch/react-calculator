@@ -13,12 +13,11 @@ A calculator project built with React.
 ## Features
 
 1. Add, subtract, multiply, divide
-2. Support decimal values
-3. Calculate percentages
-4. Invert the values
-5. Reset functionality
-6. Format larger numbers
-7. Output resize based on length
+2. Calculate percentages
+3. Invert the values
+4. Reset functionality
+5. Format larger numbers (optional)
+6. Output resize based on length (optional)
 
 ## Installation
 
