@@ -6,7 +6,7 @@ import ButtonBox from "./components/ButtonBox";
 import Button from "./components/Button";
 
 const btnValues = [
-  ["C", "+-", "%", "/"],
+  ["AC", "+-", "%", "/"],
   [7, 8, 9, "X"],
   [4, 5, 6, "-"],
   [1, 2, 3, "+"],
@@ -26,7 +26,7 @@ const removeSpaces = (num) => {
 }
 
 // operator
-const math = (a, b, sign) =>
+const mathOperator = (a, b, sign) =>
   sign === "+" ? a + b : sign === "-" ? a - b : sign === "X" ? a * b : a / b;
 
 const App = () => {
@@ -45,8 +45,10 @@ const App = () => {
         ...calc,
         num:
           removeSpaces(calc.num) % 1 === 0 && !calc.num.toString().includes(".")
-            ? toLocaleString(Number(removeSpaces(calc.num + value)))
-            : toLocaleString(calc.num + value),
+            // ? toLocaleString(Number(removeSpaces(calc.num + value)))
+            // : toLocaleString(calc.num + value),
+            ? Number(removeSpaces(calc.num + value))
+            : (calc.num + value),
         result: !calc.sign ? 0 : calc.result,
       });
     }
@@ -72,8 +74,9 @@ const App = () => {
         ? calc.result
         : !calc.result
           ? calc.num
-          : toLocaleString(
-            math(
+          // : toLocaleString(
+          : (
+            mathOperator(
               Number(removeSpaces(calc.result)),
               Number(removeSpaces(calc.num)),
               calc.sign
@@ -91,8 +94,9 @@ const App = () => {
         result:
           calc.num === "0" && calc.sign === "/"
             ? "Can't divide with 0"
-            : toLocaleString(
-              math(
+            // : toLocaleString(
+            : (
+              mathOperator(
                 Number(removeSpaces(calc.result)),
                 Number(removeSpaces(calc.num)),
                 calc.sign
@@ -108,8 +112,10 @@ const App = () => {
   const invertClickHandler = () => {
     setCalc({
       ...calc,
-      num: calc.num ? toLocaleString(removeSpaces(calc.num) * -1) : 0,
-      result: calc.result ? toLocaleString(removeSpaces(calc.result) * -1) : 0,
+      // num: calc.num ? toLocaleString(removeSpaces(calc.num) * -1) : 0,
+      // result: calc.result ? toLocaleString(removeSpaces(calc.result) * -1) : 0,
+      num: calc.num ? removeSpaces(calc.num) * -1 : 0,
+      result: calc.result ? removeSpaces(calc.result) * -1 : 0,
       sign: "",
     });
   };
@@ -132,7 +138,6 @@ const App = () => {
 
   // reset button
   const resetClickHandler = () => {
-    console.log(calc);
     setCalc({
       ...calc,
       sign: "",
@@ -150,11 +155,19 @@ const App = () => {
             <Button
               key={i}
               className={
+                // (btn === "=" || btn === "+" || btn === "-" || btn === "X" || btn === "/")
+                //   ? "sign" : btn === 0 ? "zero" : ""
                 (btn === "=" || btn === "+" || btn === "-" || btn === "X" || btn === "/")
-                  ? "sign" : btn === 0 ? "zero" : ""}
+                  ? "sign"
+                  : (btn === "AC" || btn === "+-" || btn === "%")
+                    ? "func"
+                    : btn === 0
+                      ? "zero"
+                      : ""
+              }
               value={btn}
               onClick={
-                btn === "C"
+                btn === "AC"
                   ? resetClickHandler
                   : btn === "+-"
                     ? invertClickHandler

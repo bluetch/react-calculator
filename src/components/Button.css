@@ -24,3 +24,11 @@ button:hover {
 .zero {
   grid-column: 1 / span 2;
 }
+
+.func{
+  background-color: #656668;
+}
+
+.func:hover{
+  background-color: #96999d;
+}
