@@ -30,7 +30,7 @@ const math = (a, b, sign) =>
   sign === "+" ? a + b : sign === "-" ? a - b : sign === "X" ? a * b : a / b;
 
 const App = () => {
-  let [calc, setCalc] = useState({
+  const [calc, setCalc] = useState({
     sign: "", // operator
     num: 0, // current number
     result: 0, // result number
