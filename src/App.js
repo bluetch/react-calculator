@@ -29,6 +29,7 @@ const removeSpaces = (num) => {
 const mathOperator = (a, b, sign) =>
   sign === "+" ? a + b : sign === "-" ? a - b : sign === "X" ? a * b : a / b;
 
+// App 開始
 const App = () => {
   const [calc, setCalc] = useState({
     sign: "", // operator
@@ -77,9 +78,9 @@ const App = () => {
           // : toLocaleString(
           : (
             mathOperator(
-              Number(removeSpaces(calc.result)),
-              Number(removeSpaces(calc.num)),
-              calc.sign
+              Number(removeSpaces(calc.result)), // a
+              Number(removeSpaces(calc.num)), // b
+              calc.sign // sign
             )
           ),
       num: 0,
@@ -155,8 +156,6 @@ const App = () => {
             <Button
               key={i}
               className={
-                // (btn === "=" || btn === "+" || btn === "-" || btn === "X" || btn === "/")
-                //   ? "sign" : btn === 0 ? "zero" : ""
                 (btn === "=" || btn === "+" || btn === "-" || btn === "X" || btn === "/")
                   ? "sign"
                   : (btn === "AC" || btn === "+-" || btn === "%")
