@@ -29,7 +29,8 @@ const removeSpaces = (num) => {
 const mathOperator = (a, b, sign) =>
   sign === "+" ? a + b : sign === "-" ? a - b : sign === "X" ? a * b : a / b;
 
-// App 開始
+const zeroDivisionError = "Can't divide with 0";
+
 const App = () => {
   const [calc, setCalc] = useState({
     sign: "", // operator
@@ -94,15 +95,14 @@ const App = () => {
         ...calc,
         result:
           calc.num === "0" && calc.sign === "/"
-            ? "Can't divide with 0"
-            // : toLocaleString(
-            : (
-              mathOperator(
-                Number(removeSpaces(calc.result)),
-                Number(removeSpaces(calc.num)),
-                calc.sign
-              )
-            ),
+            ? zeroDivisionError
+            : toLocaleString(
+                math(
+                  Number(removeSpaces(calc.res)),
+                  Number(removeSpaces(calc.num)),
+                  calc.sign
+                )
+              ),
         sign: "",
         num: 0,
       });
@@ -147,6 +147,22 @@ const App = () => {
     });
   };
 
+  const buttonClickHandler = (e, btn) => {
+    btn === "C" || calc.res === zeroDivisionError
+    ? resetClickHandler()
+    : btn === "+-"
+    ? invertClickHandler()
+    : btn === "%"
+    ? percentClickHandler()
+    : btn === "="
+    ? equalsClickHandler()
+    : btn === "/" || btn === "X" || btn === "-" || btn === "+"
+    ? signClickHandler(e)
+    : btn === "."
+    ? comaClickHandler(e)
+    : numClickHandler(e)
+  }
+
   return (
     <Wrapper>
       <Screen value={calc.num ? calc.num : calc.result} />
@@ -165,21 +181,7 @@ const App = () => {
                       : ""
               }
               value={btn}
-              onClick={
-                btn === "AC"
-                  ? resetClickHandler
-                  : btn === "+-"
-                    ? invertClickHandler
-                    : btn === "%"
-                      ? percentClickHandler
-                      : btn === "="
-                        ? equalsClickHandler
-                        : btn === "/" || btn === "X" || btn === "-" || btn === "+"
-                          ? signClickHandler
-                          : btn === "."
-                            ? comaClickHandler
-                            : numClickHandler
-              }
+              onClick={(e) => buttonClickHandler(e, btn)}
             />
           );
         })}
