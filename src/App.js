@@ -6,30 +6,39 @@ import ButtonBox from "./components/ButtonBox";
 import Button from "./components/Button";
 
 const btnValues = [
-  ["C", "+-", "%", "/"],
+  ["AC", "+-", "%", "/"],
   [7, 8, 9, "X"],
   [4, 5, 6, "-"],
   [1, 2, 3, "+"],
   [0, ".", "="],
 ];
 
-const toLocaleString = (num) =>
-  String(num).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, "$1 ");
+const toLocaleString = (num) => {
+  // return String(num).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, "$1 ");
+  return String(num);
+}
 
-const removeSpaces = (num) => num.toString().replace(/\s/g, "");
 
-const math = (a, b, sign) =>
+// clean space
+const removeSpaces = (num) => {
+  // \s => match a space, (ex: space, tab, newline, ...)
+  return num.toString().replace(/\s/g, "");
+}
+
+// operator
+const mathOperator = (a, b, sign) =>
   sign === "+" ? a + b : sign === "-" ? a - b : sign === "X" ? a * b : a / b;
 
 const zeroDivisionError = "Can't divide with 0";
 
 const App = () => {
-  let [calc, setCalc] = useState({
-    sign: "",
-    num: 0,
-    res: 0,
+  const [calc, setCalc] = useState({
+    sign: "", // operator
+    num: 0, // current number
+    result: 0, // result number
   });
 
+  // number button
   const numClickHandler = (e) => {
     e.preventDefault();
     const value = e.target.innerHTML;
@@ -38,13 +47,16 @@ const App = () => {
         ...calc,
         num:
           removeSpaces(calc.num) % 1 === 0 && !calc.num.toString().includes(".")
-            ? toLocaleString(Number(removeSpaces(calc.num + value)))
-            : toLocaleString(calc.num + value),
-        res: !calc.sign ? 0 : calc.res,
+            // ? toLocaleString(Number(removeSpaces(calc.num + value)))
+            // : toLocaleString(calc.num + value),
+            ? Number(removeSpaces(calc.num + value))
+            : (calc.num + value),
+        result: !calc.sign ? 0 : calc.result,
       });
     }
   };
 
+  // coma button
   const comaClickHandler = (e) => {
     e.preventDefault();
     const value = e.target.innerHTML;
@@ -55,30 +67,33 @@ const App = () => {
     });
   };
 
+  // operator button
   const signClickHandler = (e) => {
     setCalc({
       ...calc,
       sign: e.target.innerHTML,
-      res: !calc.num
-        ? calc.res
-        : !calc.res
-        ? calc.num
-        : toLocaleString(
-            math(
-              Number(removeSpaces(calc.res)),
-              Number(removeSpaces(calc.num)),
-              calc.sign
+      result: !calc.num
+        ? calc.result
+        : !calc.result
+          ? calc.num
+          // : toLocaleString(
+          : (
+            mathOperator(
+              Number(removeSpaces(calc.result)), // a
+              Number(removeSpaces(calc.num)), // b
+              calc.sign // sign
             )
           ),
       num: 0,
     });
   };
 
+  // equal button
   const equalsClickHandler = () => {
     if (calc.sign && calc.num) {
       setCalc({
         ...calc,
-        res:
+        result:
           calc.num === "0" && calc.sign === "/"
             ? zeroDivisionError
             : toLocaleString(
@@ -94,32 +109,41 @@ const App = () => {
     }
   };
 
+  // invert button
   const invertClickHandler = () => {
     setCalc({
       ...calc,
-      num: calc.num ? toLocaleString(removeSpaces(calc.num) * -1) : 0,
-      res: calc.res ? toLocaleString(removeSpaces(calc.res) * -1) : 0,
+      // num: calc.num ? toLocaleString(removeSpaces(calc.num) * -1) : 0,
+      // result: calc.result ? toLocaleString(removeSpaces(calc.result) * -1) : 0,
+      num: calc.num ? removeSpaces(calc.num) * -1 : 0,
+      result: calc.result ? removeSpaces(calc.result) * -1 : 0,
       sign: "",
     });
   };
 
+  // percent button
   const percentClickHandler = () => {
+    // parseFloat() 將字串轉換為以十進位表示的浮點數。parseFloat() 僅接受一個參數。
     let num = calc.num ? parseFloat(removeSpaces(calc.num)) : 0;
-    let res = calc.res ? parseFloat(removeSpaces(calc.res)) : 0;
+    let result = calc.result ? parseFloat(removeSpaces(calc.result)) : 0;
+
+    // Math 物件的 Math.pow() 方法用來做指數運算 baseexponent。
+    // x /= y	等於 x = x / y
     setCalc({
       ...calc,
       num: (num /= Math.pow(100, 1)),
-      res: (res /= Math.pow(100, 1)),
+      result: (result /= Math.pow(100, 1)),
       sign: "",
     });
   };
 
+  // reset button
   const resetClickHandler = () => {
     setCalc({
       ...calc,
       sign: "",
       num: 0,
-      res: 0,
+      result: 0,
     });
   };
 
@@ -141,13 +165,21 @@ const App = () => {
 
   return (
     <Wrapper>
-      <Screen value={calc.num ? calc.num : calc.res} />
+      <Screen value={calc.num ? calc.num : calc.result} />
       <ButtonBox>
         {btnValues.flat().map((btn, i) => {
           return (
             <Button
               key={i}
-              className={btn === "=" ? "equals" : ""}
+              className={
+                (btn === "=" || btn === "+" || btn === "-" || btn === "X" || btn === "/")
+                  ? "sign"
+                  : (btn === "AC" || btn === "+-" || btn === "%")
+                    ? "func"
+                    : btn === 0
+                      ? "zero"
+                      : ""
+              }
               value={btn}
               onClick={(e) => buttonClickHandler(e, btn)}
             />
